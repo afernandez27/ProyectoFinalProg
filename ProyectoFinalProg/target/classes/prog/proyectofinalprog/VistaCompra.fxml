@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.Pane?>
+
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="437.0" prefWidth="683.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="prog.proyectofinalprog.ControllerComprar">
+   <children>
+      <TableView fx:id="tblComprar" layoutX="246.0" layoutY="42.0" prefHeight="353.0" prefWidth="406.0">
+        <columns>
+          <TableColumn fx:id="tblcMarca" prefWidth="151.0" text="Marca" />
+          <TableColumn fx:id="tblcModelo" prefWidth="164.0" text="Modelo" />
+            <TableColumn fx:id="tblcPrecio" prefWidth="90.0" text="Precio" />
+        </columns>
+      </TableView>
+      <Button fx:id="bttnComp" layoutX="53.0" layoutY="162.0" mnemonicParsing="false" onAction="#compra" prefHeight="25.0" prefWidth="134.0" text="Comprar" />
+      <Button fx:id="bttnInfo" layoutX="53.0" layoutY="206.0" mnemonicParsing="false" onAction="#masInfo" prefHeight="25.0" prefWidth="134.0" text="Mas Info" />
+   </children>
+</Pane>
