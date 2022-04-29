@@ -15,6 +15,7 @@ public class Coche {
         this.color = color;
         this.precio = precio;
         this.modelo = modelo;
+        String hola;
     }
 
     public Modelo getModelo() {
