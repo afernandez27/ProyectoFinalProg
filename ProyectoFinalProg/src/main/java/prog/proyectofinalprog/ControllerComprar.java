@@ -1,7 +1,10 @@
 package prog.proyectofinalprog;
 
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
@@ -9,12 +12,17 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.event.ActionEvent;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.net.URL;
+import java.util.ResourceBundle;
 
-public class ControllerComprar {
+public class ControllerComprar implements Initializable {
 
+    @FXML
+    private Button bttnCerrar;
 
     @FXML
     private Button bttnComp;
@@ -23,16 +31,16 @@ public class ControllerComprar {
     private Button bttnInfo;
 
     @FXML
-    private TableView<?> tblComprar;
+    private TableView<CocheTabla> tblComprar;
 
     @FXML
-    private TableColumn<?, ?> tblcMarca;
+    private TableColumn<CocheTabla, String> tblcMarca;
 
     @FXML
-    private TableColumn<?, ?> tblcModelo;
+    private TableColumn<CocheTabla, String> tblcModelo;
 
     @FXML
-    private TableColumn<?, ?> tblcPrecio;
+    private TableColumn<CocheTabla, Integer> tblcPrecio;
 
     @FXML
     void compra(ActionEvent event) {
@@ -71,5 +79,35 @@ public class ControllerComprar {
             alert.showAndWait();
         }
     }
+    @FXML
+    void cerrar(ActionEvent event) {
+        try {
+            Node source = (Node) event.getSource();
+            Stage viejaVentana = (Stage) source.getScene().getWindow();
+            Stage stage = new Stage();
+            Parent root = FXMLLoader.load(getClass().getResource("VistaBienvenida.fxml"));
+            Scene scene = new Scene(root);
+            stage.setScene(scene);
+            stage.setTitle("Compra");
+            viejaVentana.close();
+            stage.showAndWait();
 
+        } catch (IOException e){
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setHeaderText(null);
+            alert.setTitle("Error");
+            alert.setContentText(e.getMessage());
+            alert.showAndWait();
+        }
+    }
+
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        this.tblcMarca.setCellValueFactory(new PropertyValueFactory("marca"));
+        this.tblcModelo.setCellValueFactory(new PropertyValueFactory("modelo"));
+        this.tblcPrecio.setCellValueFactory(new PropertyValueFactory("precio"));
+        Coche c = new Coche();
+        ObservableList<CocheTabla> obs = c.getCoches();
+        this.tblComprar.setItems(obs);
+    }
 }

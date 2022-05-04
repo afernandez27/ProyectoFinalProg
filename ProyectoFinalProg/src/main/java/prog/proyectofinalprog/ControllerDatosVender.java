@@ -2,8 +2,10 @@ package prog.proyectofinalprog;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
+import javafx.stage.Stage;
 
 public class ControllerDatosVender {
 
@@ -42,7 +44,9 @@ public class ControllerDatosVender {
 
     @FXML
     void cancelar(ActionEvent event) {
-
+        Node source = (Node) event.getSource();
+        Stage stage = (Stage) source.getScene().getWindow();
+        stage.close();
     }
 
     @FXML

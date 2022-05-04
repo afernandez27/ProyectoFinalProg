@@ -3,6 +3,7 @@ package prog.proyectofinalprog;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
@@ -27,6 +28,9 @@ public class ControllerBienvenida {
             Scene scene = new Scene(root);
             stage.setScene(scene);
             stage.setTitle("Compra");
+            Node source = (Node) event.getSource();
+            Stage ventanaActual = (Stage) source.getScene().getWindow();
+            ventanaActual.close();
             stage.showAndWait();
 
         } catch (IOException e){
