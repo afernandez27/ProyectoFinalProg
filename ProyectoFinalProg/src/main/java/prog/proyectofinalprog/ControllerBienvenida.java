@@ -23,15 +23,16 @@ public class ControllerBienvenida {
     @FXML
     void comprarCoche(ActionEvent event) {
         try {
+            Stage ventanaActual = (Stage) bttnComprar.getScene().getWindow();
+            ventanaActual.close();
             Stage stage = new Stage();
             Parent root = FXMLLoader.load(getClass().getResource("VistaCompra.fxml"));
             Scene scene = new Scene(root);
             stage.setScene(scene);
             stage.setTitle("Compra");
-            Node source = (Node) event.getSource();
-            Stage ventanaActual = (Stage) source.getScene().getWindow();
-            ventanaActual.close();
-            stage.showAndWait();
+            stage.show();
+
+
 
         } catch (IOException e){
             Alert alert = new Alert(Alert.AlertType.ERROR);

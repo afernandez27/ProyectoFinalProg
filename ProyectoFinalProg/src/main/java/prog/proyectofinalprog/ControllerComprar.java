@@ -82,15 +82,14 @@ public class ControllerComprar implements Initializable {
     @FXML
     void cerrar(ActionEvent event) {
         try {
-            Node source = (Node) event.getSource();
-            Stage viejaVentana = (Stage) source.getScene().getWindow();
+            Stage viejaVentana = (Stage) bttnCerrar.getScene().getWindow();
+            viejaVentana.close();
             Stage stage = new Stage();
             Parent root = FXMLLoader.load(getClass().getResource("VistaBienvenida.fxml"));
             Scene scene = new Scene(root);
             stage.setScene(scene);
             stage.setTitle("Compra");
-            viejaVentana.close();
-            stage.showAndWait();
+            stage.show();
 
         } catch (IOException e){
             Alert alert = new Alert(Alert.AlertType.ERROR);
