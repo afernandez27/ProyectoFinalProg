@@ -48,18 +48,18 @@ public class ControllerDatosComprar implements Initializable {
 
     private ObservableList<Coche> coches;
 
+    CocheTabla ct;
+
+    public void setCocheTabla(CocheTabla ct){
+        this.ct=ct;
+    }
+
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        // Conexión con la base de datos
-        Connection dbConnection = null;
-        try {
-            dbConnection = DriverManager.getConnection("jdbc:mysql://localhost:3306/", "root", "root");
-            Statement stmt = dbConnection.createStatement();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
+        this.txtMarca.setText(ct.getMarca());
+        this.txtModelo.setText(ct.getModelo());
+        this.txtPrecio.setText(String.valueOf(ct.getPrecio()));
 
     }
 
@@ -86,7 +86,7 @@ public class ControllerDatosComprar implements Initializable {
 
             // Creamos la persona y el coche
             Persona p = new Persona(dni, nombre, apellido1, apellido2, true);
-//            Coche c = new Coche(/*PARÁMETROS DEL COCHE (MARCA, MODELO, PRECIO)*/);
+            CocheTabla c = new CocheTabla(marca, modelo, precio);
 
 //            if (!this.coches.contains(c)) {
 //                try {

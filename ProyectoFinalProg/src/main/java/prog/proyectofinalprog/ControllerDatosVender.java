@@ -138,20 +138,28 @@ public class ControllerDatosVender implements Initializable {
                 if (!resultadoIdModelo.next()) {
                     String insertarModelo = "INSERT IGNORE INTO concesionario.modelo(nombre_marca, nombre_modelo) VALUES('" + m.getMarca() + "', '" + m.getModelo() + "')";
                     stmt.executeUpdate(insertarModelo);
+                } else {
+                    while (resultadoIdModelo.next()) {
+                        idModelo = resultadoIdModelo.getInt("id");
+                        System.out.println(idModelo);
+                    }
                 }
-                while (resultadoIdModelo.next()) {
-                    idModelo = resultadoIdModelo.getInt("id");
-                    System.out.println(idModelo);
-                }
+
 
                 // Selecciona el vendedor o lo crea si no existe
                 String seleccionarVendedor = "SELECT id FROM concesionario.vendedor WHERE dni = '" + p.getDni() + "'";
                 ResultSet resultadoIdVendedor = stmt.executeQuery(seleccionarVendedor);
                 int idVendedor = 0;
-                while (resultadoIdVendedor.next()) {
-                    idVendedor = resultadoIdVendedor.getInt("id");
-                    System.out.println(idVendedor);
+                if (!resultadoIdVendedor.next()) {
+                    String insertarVendedor = "INSERT IGNORE INTO concesionario.vendedor(dni, nombre, apellido1, apellido2) VALUES('" + p.getDni() + "', '" + p.getNombre() + "', '" + p.getApellido1() + "', '" + p.getApellido2() + "')";
+                    stmt.executeUpdate(insertarVendedor);
+                } else {
+                    while (resultadoIdVendedor.next()) {
+                        idVendedor = resultadoIdVendedor.getInt("id");
+                        System.out.println(idVendedor);
+                    }
                 }
+
 
 
                 String insertarCoche = "INSERT IGNORE INTO concesionario.coche(matricula, kilometraje, potencia, color, precio, id_vendedor, id_modelo) VALUES('" + c.getMatricula() + "', " + c.getKilometraje() + ", " + c.getPotencia() + ", '" + c.getColor() + "', " + c.getPrecio() + ", " + idVendedor + ", " + idModelo + ")";
