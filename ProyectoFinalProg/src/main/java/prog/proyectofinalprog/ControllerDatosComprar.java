@@ -5,6 +5,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
@@ -95,7 +96,11 @@ public class ControllerDatosComprar implements Initializable {
 //            }
 
         } catch (NumberFormatException e) {
-            e.printStackTrace();
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setHeaderText(null);
+            alert.setTitle("Error");
+            alert.setContentText("Error con el formato de los números");
+            alert.showAndWait();
         } finally {
             Stage stage = (Stage) this.bttnConfirmarCompra.getScene().getWindow();
             stage.close();
