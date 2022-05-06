@@ -13,6 +13,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.event.ActionEvent;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -63,13 +64,17 @@ public class ControllerComprar implements Initializable {
 
     @FXML
     void masInfo(ActionEvent event) {
+        CocheTabla ct = this.tblComprar.getSelectionModel().getSelectedItem();
+
         try {
             Stage stage = new Stage();
             Parent root = FXMLLoader.load(getClass().getResource("VistaMasInfo.fxml"));
             Scene scene = new Scene(root);
             stage.setScene(scene);
             stage.setTitle("Compra");
-            stage.showAndWait();
+            ControllerMasInfo controllerMasInfo = new ControllerMasInfo();
+            controllerMasInfo.setCocheTabla(ct);
+            stage.show();
 
         } catch (IOException e){
             Alert alert = new Alert(Alert.AlertType.ERROR);

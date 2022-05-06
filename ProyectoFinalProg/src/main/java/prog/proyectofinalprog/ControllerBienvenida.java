@@ -21,6 +21,9 @@ public class ControllerBienvenida {
     private Button bttnVender;
 
     @FXML
+    private Button bttnPedidos;
+
+    @FXML
     void comprarCoche(ActionEvent event) {
         try {
             Stage ventanaActual = (Stage) bttnComprar.getScene().getWindow();
@@ -46,12 +49,15 @@ public class ControllerBienvenida {
 @FXML
     void venderCoche(ActionEvent event) {
     try {
+        Node source = (Node) event.getSource();
+        Stage ventanaVieja = (Stage) source.getScene().getWindow();
+        ventanaVieja.close();
         Stage stage = new Stage();
         Parent root = FXMLLoader.load(getClass().getResource("VistaDatosVender.fxml"));
         Scene scene = new Scene(root);
         stage.setScene(scene);
         stage.setTitle("Compra");
-        stage.showAndWait();
+        stage.show();
 
     } catch (IOException e){
         Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -61,5 +67,7 @@ public class ControllerBienvenida {
         alert.showAndWait();
     }
     }
+@FXML
+void generarPedidos(ActionEvent event){}
 
 }

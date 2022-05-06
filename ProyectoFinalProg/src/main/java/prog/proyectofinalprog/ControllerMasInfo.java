@@ -6,6 +6,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.Dialog;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
@@ -16,28 +17,28 @@ import java.util.ResourceBundle;
 public class ControllerMasInfo implements Initializable {
 
     @FXML
-    private Button bttnCerrar;
+    public Button bttnCerrar;
 
     @FXML
-    private TextField txtMatricula;
+    public TextField txtMatricula;
 
     @FXML
-    private TextField txtColor;
+    public TextField txtColor;
 
     @FXML
-    private TextField txtKm;
+    public TextField txtKm;
 
     @FXML
-    private TextField txtMarca;
+    public TextField txtMarca;
 
     @FXML
-    private TextField txtModelo;
+    public TextField txtModelo;
 
     @FXML
-    private TextField txtPotencia;
+    public TextField txtPotencia;
 
     @FXML
-    private TextField txtPrecio;
+    public TextField txtPrecio;
     CocheTabla ct;
     @FXML
     void cerrar(ActionEvent event) {
@@ -51,7 +52,7 @@ public class ControllerMasInfo implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        Coche c = getCoche(ct);
+        Coche c = getCoche();
         this.txtColor.setText(c.getColor());
         this.txtKm.setText(String.valueOf(c.getKilometraje()));
         this.txtMatricula.setText(c.getMatricula());
@@ -61,13 +62,14 @@ public class ControllerMasInfo implements Initializable {
         this.txtPrecio.setText(String.valueOf(c.getPrecio()));
     }
 
-    private Coche getCoche(CocheTabla ct) {
+    private Coche getCoche() {
         Connection conexion;
         Coche c=null;
         try {
             conexion = DriverManager.getConnection("jdbc:mysql://localhost:3306/concesionario","root","root");
             Statement statement = conexion.createStatement();
-            ResultSet rs = statement.executeQuery("select * from coche");
+
+            ResultSet rs = statement.executeQuery("select * from coche inner join modelo on coche.id_modelo=modelo.id where modelo.nombre_marca = '" + this.ct.getMarca() + "' and modelo.nombre_modelo = '" + this.ct.getModelo() + "';");
 
             while (rs.next()){
                 String matricula = rs.getString("matricula");
