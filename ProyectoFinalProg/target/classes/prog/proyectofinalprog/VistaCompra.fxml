@@ -16,5 +16,6 @@
       </TableView>
       <Button fx:id="bttnComp" layoutX="53.0" layoutY="162.0" mnemonicParsing="false" onAction="#compra" prefHeight="25.0" prefWidth="134.0" text="Comprar" />
       <Button fx:id="bttnInfo" layoutX="53.0" layoutY="206.0" mnemonicParsing="false" onAction="#masInfo" prefHeight="25.0" prefWidth="134.0" text="Mas Info" />
+      <Button fx:id="bttnCerrar" layoutX="53.0" layoutY="249.0" mnemonicParsing="false" onAction="#cerrar" prefHeight="25.0" prefWidth="134.0" text="Cerrar" />
    </children>
 </Pane>
