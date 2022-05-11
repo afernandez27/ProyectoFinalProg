@@ -99,10 +99,11 @@ public class Coche {
 
             while (rs.next()){
                 int precio = rs.getInt("precio");
+                String matricula = rs.getString("matricula");
                 int idModelo = rs.getInt("id_modelo");
                 Modelo modelo = getModelo(idModelo);
 
-                CocheTabla ct = new CocheTabla(modelo.getMarca(), modelo.getModelo(), precio);
+                CocheTabla ct = new CocheTabla(matricula,modelo.getMarca(), modelo.getModelo(), precio);
                 arrCoches.add(ct);
             }
             conexion.close();

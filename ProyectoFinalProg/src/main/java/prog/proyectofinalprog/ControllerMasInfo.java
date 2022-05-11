@@ -39,20 +39,16 @@ public class ControllerMasInfo implements Initializable {
 
     @FXML
     public TextField txtPrecio;
-    CocheTabla ct;
     @FXML
     void cerrar(ActionEvent event) {
         Node source = (Node) event.getSource();
         Stage stage = (Stage) source.getScene().getWindow();
         stage.close();
     }
-    public void setCocheTabla(CocheTabla ct){
-        this.ct=ct;
-    }
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        Coche c = getCoche();
+        Coche c = getCoche(ControllerComprar.getCocheTabla());
         this.txtColor.setText(c.getColor());
         this.txtKm.setText(String.valueOf(c.getKilometraje()));
         this.txtMatricula.setText(c.getMatricula());
@@ -62,14 +58,15 @@ public class ControllerMasInfo implements Initializable {
         this.txtPrecio.setText(String.valueOf(c.getPrecio()));
     }
 
-    private Coche getCoche() {
+    private Coche getCoche(CocheTabla ct) {
         Connection conexion;
         Coche c=null;
         try {
             conexion = DriverManager.getConnection("jdbc:mysql://localhost:3306/concesionario","root","root");
             Statement statement = conexion.createStatement();
 
-            ResultSet rs = statement.executeQuery("select * from coche inner join modelo on coche.id_modelo=modelo.id where modelo.nombre_marca = '" + this.ct.getMarca() + "' and modelo.nombre_modelo = '" + this.ct.getModelo() + "';");
+
+            ResultSet rs = statement.executeQuery("select * from coche inner join modelo on coche.id_modelo=modelo.id where modelo.nombre_marca = '" + ct.getMarca() + "' and modelo.nombre_modelo = '" + ct.getModelo() + "';");
 
             while (rs.next()){
                 String matricula = rs.getString("matricula");

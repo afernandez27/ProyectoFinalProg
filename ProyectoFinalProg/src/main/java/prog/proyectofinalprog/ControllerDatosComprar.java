@@ -86,7 +86,7 @@ public class ControllerDatosComprar implements Initializable {
 
             // Creamos la persona y el coche
             Persona p = new Persona(dni, nombre, apellido1, apellido2, true);
-            CocheTabla c = new CocheTabla(marca, modelo, precio);
+//            CocheTabla c = new CocheTabla(marca, modelo, precio);
 
 //            if (!this.coches.contains(c)) {
 //                try {

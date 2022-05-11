@@ -3,6 +3,7 @@ package prog.proyectofinalprog;
 public class CocheTabla {
     private String marca;
     private String modelo;
+    private String matricula;
     private int precio;
 
     public String getMarca() {
@@ -29,9 +30,18 @@ public class CocheTabla {
         this.precio = precio;
     }
 
-    public CocheTabla(String marca, String modelo, int precio) {
+    public String getMatricula() {
+        return matricula;
+    }
+
+    public void setMatricula(String matricula) {
+        this.matricula = matricula;
+    }
+
+    public CocheTabla(String matricula, String marca, String modelo, int precio) {
         this.marca = marca;
         this.modelo = modelo;
         this.precio = precio;
+        this.matricula = matricula;
     }
 }
