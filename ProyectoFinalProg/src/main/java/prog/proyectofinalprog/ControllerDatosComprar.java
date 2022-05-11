@@ -43,6 +43,8 @@ public class ControllerDatosComprar implements Initializable {
     @FXML
     private TextField txtPrecio;
 
+    public Connection dbConnection;
+
     private ObservableList<Coche> coches;
 
     CocheTabla ct;
@@ -83,21 +85,27 @@ public class ControllerDatosComprar implements Initializable {
 
             // Creamos la persona y el coche
             Persona p = new Persona(dni, nombre, apellido1, apellido2, true);
-//            CocheTabla c = new CocheTabla(marca, modelo, precio);
+            CocheTabla c = ControllerComprar.getCocheTabla();
 
-//            if (!this.coches.contains(c)) {
-//                try {
-                    // ELIMINAR EL REGISTRO SELECCIONADO DE LA BBDD
-//                    String query = // Query para borrar el registro
-//                }
-//            }
+            Statement stmt = null;
+            dbConnection = DriverManager.getConnection("jdbc:mysql://localhost:3306/", "root", "root");
 
+            // ELIMINAR EL REGISTRO SELECCIONADO DE LA BBDD
+            try {
+                stmt = dbConnection.createStatement();
+                String borrarCoche = "DELETE FROM concesionario.coche WHERE matricula = '" + c.getMatricula() + "'";
+                stmt.executeUpdate(borrarCoche);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         } catch (NumberFormatException e) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setHeaderText(null);
             alert.setTitle("Error");
             alert.setContentText("Error con el formato de los números");
             alert.showAndWait();
+        } catch (SQLException e) {
+            e.printStackTrace();
         } finally {
             Stage stage = (Stage) this.bttnConfirmarCompra.getScene().getWindow();
             stage.close();
@@ -105,36 +113,7 @@ public class ControllerDatosComprar implements Initializable {
 
     }
 
-    private Coche getCoche(CocheTabla ct) {
-        Connection conexion;
-        Coche c=null;
-        try {
-            conexion = DriverManager.getConnection("jdbc:mysql://localhost:3306/concesionario","root","root");
-            Statement statement = conexion.createStatement();
 
-
-            ResultSet rs = statement.executeQuery("select * from coche inner join modelo on coche.id_modelo=modelo.id where modelo.nombre_marca = '" + ct.getMarca() + "' and modelo.nombre_modelo = '" + ct.getModelo() + " and coche.matricula = '" + ct.getMatricula() + "'");
-
-            while (rs.next()){
-                String matricula = rs.getString("matricula");
-                int kilometraje = rs.getInt("kilometraje");
-                int potencia = rs.getInt("potencia");
-                String color = rs.getString("color");
-                int precio = rs.getInt("precio");
-                int idModelo = rs.getInt("id_modelo");
-                Modelo m = Coche.getModelo(idModelo);
-                c = new Coche(matricula,kilometraje,potencia,color,precio,m);
-            }
-            conexion.close();
-        } catch (SQLException e){
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setHeaderText(null);
-            alert.setTitle("Error");
-            alert.setContentText(e.getMessage());
-            alert.showAndWait();
-        }
-        return c;
-    }
 
 }
 
