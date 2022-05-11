@@ -11,10 +11,7 @@ import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
 import java.net.URL;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.ResourceBundle;
 
 public class ControllerDatosComprar implements Initializable {
@@ -106,6 +103,37 @@ public class ControllerDatosComprar implements Initializable {
             stage.close();
         }
 
+    }
+
+    private Coche getCoche(CocheTabla ct) {
+        Connection conexion;
+        Coche c=null;
+        try {
+            conexion = DriverManager.getConnection("jdbc:mysql://localhost:3306/concesionario","root","root");
+            Statement statement = conexion.createStatement();
+
+
+            ResultSet rs = statement.executeQuery("select * from coche inner join modelo on coche.id_modelo=modelo.id where modelo.nombre_marca = '" + ct.getMarca() + "' and modelo.nombre_modelo = '" + ct.getModelo() + " and coche.matricula = '" + ct.getMatricula() + "'");
+
+            while (rs.next()){
+                String matricula = rs.getString("matricula");
+                int kilometraje = rs.getInt("kilometraje");
+                int potencia = rs.getInt("potencia");
+                String color = rs.getString("color");
+                int precio = rs.getInt("precio");
+                int idModelo = rs.getInt("id_modelo");
+                Modelo m = Coche.getModelo(idModelo);
+                c = new Coche(matricula,kilometraje,potencia,color,precio,m);
+            }
+            conexion.close();
+        } catch (SQLException e){
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setHeaderText(null);
+            alert.setTitle("Error");
+            alert.setContentText(e.getMessage());
+            alert.showAndWait();
+        }
+        return c;
     }
 
 }
