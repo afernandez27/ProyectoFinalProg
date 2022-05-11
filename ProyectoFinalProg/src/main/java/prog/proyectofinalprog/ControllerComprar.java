@@ -30,7 +30,7 @@ public class ControllerComprar implements Initializable {
     private Button bttnInfo;
 
     @FXML
-    private TableView<CocheTabla> tblComprar;
+    public TableView<CocheTabla> tblComprar;
 
     @FXML
     private TableColumn<CocheTabla, String> tblcMarca;
@@ -54,6 +54,10 @@ public class ControllerComprar implements Initializable {
         cocheTabla= ct;
     }
 
+    public TableView<CocheTabla> getTablaComprar() {
+        return this.tblComprar;
+    }
+
     @FXML
     void compra(ActionEvent event) {
         CocheTabla ct = this.tblComprar.getSelectionModel().getSelectedItem();
@@ -64,7 +68,8 @@ public class ControllerComprar implements Initializable {
             Scene scene = new Scene(root);
             stage.setScene(scene);
             stage.setTitle("Compra");
-            stage.show();
+            stage.showAndWait();
+            this.tblComprar.refresh();
 
         } catch (IOException e){
             Alert alert = new Alert(Alert.AlertType.ERROR);

@@ -109,6 +109,7 @@ public class ControllerDatosComprar implements Initializable {
             e.printStackTrace();
         } finally {
             Stage stage = (Stage) this.bttnConfirmarCompra.getScene().getWindow();
+
             stage.close();
         }
 
