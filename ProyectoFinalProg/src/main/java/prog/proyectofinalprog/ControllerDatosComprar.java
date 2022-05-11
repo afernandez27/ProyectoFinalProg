@@ -56,6 +56,7 @@ public class ControllerDatosComprar implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        ct = ControllerComprar.getCocheTabla();
         this.txtMarca.setText(ct.getMarca());
         this.txtModelo.setText(ct.getModelo());
         this.txtPrecio.setText(String.valueOf(ct.getPrecio()));
@@ -85,7 +86,7 @@ public class ControllerDatosComprar implements Initializable {
 
             // Creamos la persona y el coche
             Persona p = new Persona(dni, nombre, apellido1, apellido2, true);
-            CocheTabla c = ControllerComprar.getCocheTabla();
+
 
             Statement stmt = null;
             dbConnection = DriverManager.getConnection("jdbc:mysql://localhost:3306/", "root", "root");
@@ -93,7 +94,7 @@ public class ControllerDatosComprar implements Initializable {
             // ELIMINAR EL REGISTRO SELECCIONADO DE LA BBDD
             try {
                 stmt = dbConnection.createStatement();
-                String borrarCoche = "DELETE FROM concesionario.coche WHERE matricula = '" + c.getMatricula() + "'";
+                String borrarCoche = "DELETE FROM concesionario.coche WHERE matricula = '" + ct.getMatricula() + "'";
                 stmt.executeUpdate(borrarCoche);
             } catch (SQLException e) {
                 e.printStackTrace();

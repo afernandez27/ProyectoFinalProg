@@ -56,13 +56,15 @@ public class ControllerComprar implements Initializable {
 
     @FXML
     void compra(ActionEvent event) {
+        CocheTabla ct = this.tblComprar.getSelectionModel().getSelectedItem();
         try {
+            setCocheTabla(ct);
             Stage stage = new Stage();
             Parent root = FXMLLoader.load(getClass().getResource("VistaDatosCompra.fxml"));
             Scene scene = new Scene(root);
             stage.setScene(scene);
             stage.setTitle("Compra");
-            stage.showAndWait();
+            stage.show();
 
         } catch (IOException e){
             Alert alert = new Alert(Alert.AlertType.ERROR);
