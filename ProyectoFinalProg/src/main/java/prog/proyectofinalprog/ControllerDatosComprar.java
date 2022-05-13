@@ -83,26 +83,33 @@ public class ControllerDatosComprar implements Initializable {
             String apellido1 = this.txtApellido1.getText();
             String apellido2 = this.txtApellido2.getText();
 
-            // Datos del coche
-            String marca = this.txtMarca.getText();
-            String modelo = this.txtModelo.getText();
-            int precio = Integer.parseInt(this.txtPrecio.getText());
+            // Comprobar DNI
+            comprobarDNI(dni);
 
             // Creamos la persona y el coche
             Persona p = new Persona(dni, nombre, apellido1, apellido2, true);
 
+            if (comprobarDNI(p.getDni())) {
+                Statement stmt = null;
+                dbConnection = DriverManager.getConnection("jdbc:mysql://localhost:3306/", "root", "root");
 
-            Statement stmt = null;
-            dbConnection = DriverManager.getConnection("jdbc:mysql://localhost:3306/", "root", "root");
-
-            // ELIMINAR EL REGISTRO SELECCIONADO DE LA BBDD
-            try {
-                stmt = dbConnection.createStatement();
-                String borrarCoche = "UPDATE concesionario.coche SET estado = 'v' WHERE matricula = '" + ct.getMatricula() + "'";
-                stmt.executeUpdate(borrarCoche);
-            } catch (SQLException e) {
-                e.printStackTrace();
+                // Actualiza el registro de la bbdd a vendido e inserta el cliente
+                try {
+                    stmt = dbConnection.createStatement();
+                    actualizarCoche(stmt);
+                    insertarCliente(p, stmt);
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            } else {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setHeaderText(null);
+                alert.setTitle("Error");
+                alert.setContentText("Error al introducir el DNI");
+                this.txtDNI.clear();
             }
+
+
         } catch (NumberFormatException e) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setHeaderText(null);
@@ -133,6 +140,32 @@ public class ControllerDatosComprar implements Initializable {
 
     }
 
+    private void insertarCliente(Persona p, Statement stmt) throws SQLException {
+        String seleccionarCliente = "SELECT id FROM concesionario.cliente where dni = '" + p.getDni() + "'";
+        ResultSet resultadoIdCliente = stmt.executeQuery(seleccionarCliente);
+        int idCliente = 0;
+
+        if (!resultadoIdCliente.next()) {
+            String insertarPersona = "INSERT INTO concesionario.cliente(dni, nombre, apellido1, apellido2) VALUES('" + p.getDni() + "', '" + p.getNombre() + "', '" + p.getApellido1() + "', '" + p.getApellido2() + "')";
+            stmt.executeUpdate(insertarPersona);
+        } else {
+            while (resultadoIdCliente.next()) {
+                idCliente = resultadoIdCliente.getInt("id");
+                System.out.println(idCliente);
+            }
+        }
+    }
+
+
+    private void actualizarCoche(Statement stmt) throws SQLException {
+        String cocheUpdate = "UPDATE concesionario.coche SET estado = 'v' WHERE matricula = '" + ct.getMatricula() + "'";
+        stmt.executeUpdate(cocheUpdate);
+    }
+
+
+    private boolean comprobarDNI(String dni) {
+        return dni.matches("[0-9]{8}[A-Za-z]");
+    }
 
 
 }
