@@ -68,8 +68,9 @@ public class ControllerComprar implements Initializable {
             Scene scene = new Scene(root);
             stage.setScene(scene);
             stage.setTitle("Compra");
+            Stage viejaVentana = (Stage) this.bttnComp.getScene().getWindow();
+            viejaVentana.close();
             stage.showAndWait();
-            this.tblComprar.refresh();
 
         } catch (IOException e){
             Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -121,6 +122,10 @@ public class ControllerComprar implements Initializable {
             alert.setContentText(e.getMessage());
             alert.showAndWait();
         }
+    }
+
+    public void refrescar(){
+        this.tblComprar.refresh();
     }
 
     @Override

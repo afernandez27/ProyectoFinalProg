@@ -95,7 +95,7 @@ public class Coche {
         try {
             conexion = DriverManager.getConnection("jdbc:mysql://localhost:3306/concesionario","root","root");
             Statement statement = conexion.createStatement();
-            ResultSet rs = statement.executeQuery("select * from coche");
+            ResultSet rs = statement.executeQuery("select * from coche where estado='d'");
 
             while (rs.next()){
                 int precio = rs.getInt("precio");
