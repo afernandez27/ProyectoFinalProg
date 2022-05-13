@@ -98,7 +98,7 @@ public class ControllerDatosComprar implements Initializable {
             // ELIMINAR EL REGISTRO SELECCIONADO DE LA BBDD
             try {
                 stmt = dbConnection.createStatement();
-                String borrarCoche = "DELETE FROM concesionario.coche WHERE matricula = '" + ct.getMatricula() + "'";
+                String borrarCoche = "UPDATE concesionario.coche SET estado = 'v' WHERE matricula = '" + ct.getMatricula() + "'";
                 stmt.executeUpdate(borrarCoche);
             } catch (SQLException e) {
                 e.printStackTrace();
