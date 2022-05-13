@@ -66,7 +66,7 @@ public class ControllerMasInfo implements Initializable {
             Statement statement = conexion.createStatement();
 
 
-            ResultSet rs = statement.executeQuery("select * from coche inner join modelo on coche.id_modelo=modelo.id where modelo.nombre_marca = '" + ct.getMarca() + "' and modelo.nombre_modelo = '" + ct.getModelo() + " and coche.matricula = '" + ct.getMatricula() + "'");
+            ResultSet rs = statement.executeQuery("select * from coche inner join modelo on coche.id_modelo=modelo.id where modelo.nombre_marca = '" + ct.getMarca() + "' and modelo.nombre_modelo = '" + ct.getModelo() + "' and coche.matricula = '" + ct.getMatricula() + "'");
 
             while (rs.next()){
                 String matricula = rs.getString("matricula");

@@ -150,19 +150,18 @@ public class ControllerDatosVender implements Initializable {
                 String seleccionarVendedor = "SELECT id FROM concesionario.vendedor WHERE dni = '" + p.getDni() + "'";
                 ResultSet resultadoIdVendedor = stmt.executeQuery(seleccionarVendedor);
                 int idVendedor = 0;
-                if (!resultadoIdVendedor.next()) {
-                    String insertarVendedor = "INSERT IGNORE INTO concesionario.vendedor(dni, nombre, apellido1, apellido2) VALUES('" + p.getDni() + "', '" + p.getNombre() + "', '" + p.getApellido1() + "', '" + p.getApellido2() + "')";
-                    stmt.executeUpdate(insertarVendedor);
-                } else {
-                    while (resultadoIdVendedor.next()) {
-                        idVendedor = resultadoIdVendedor.getInt("id");
+                while (resultadoIdVendedor.next()) {
+                    idVendedor = resultadoIdVendedor.getInt("id");
+                    if (idVendedor > 0) {
                         System.out.println(idVendedor);
+                    } else {
+                        String insertarVendedor = "INSERT INTO concesionario.vendedor(dni, nombre, apellido1, apellido2) VALUES('" + p.getDni() + "', '" + p.getNombre() + "', '" + p.getApellido1() + "', '" + p.getApellido2() + "')";
+                        stmt.executeUpdate(insertarVendedor);
                     }
                 }
 
 
-
-                String insertarCoche = "INSERT IGNORE INTO concesionario.coche(matricula, kilometraje, potencia, color, precio, id_vendedor, id_modelo) VALUES('" + c.getMatricula() + "', " + c.getKilometraje() + ", " + c.getPotencia() + ", '" + c.getColor() + "', " + c.getPrecio() + ", " + idVendedor + ", " + idModelo + ")";
+                String insertarCoche = "INSERT INTO concesionario.coche(matricula, kilometraje, potencia, color, precio, estado, id_vendedor, id_modelo) VALUES('" + c.getMatricula() + "', " + c.getKilometraje() + ", " + c.getPotencia() + ", '" + c.getColor() + "', " + c.getPrecio() + ", " + "'d', " + idVendedor + ", " + idModelo + ")";
                 stmt.executeUpdate(insertarCoche);
                 System.out.println("Coche insertado");
             } catch (SQLException e) {
