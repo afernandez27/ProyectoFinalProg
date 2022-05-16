@@ -60,46 +60,70 @@ public class ControllerComprar implements Initializable {
 
     @FXML
     void compra(ActionEvent event) {
-        CocheTabla ct = this.tblComprar.getSelectionModel().getSelectedItem();
-        try {
-            setCocheTabla(ct);
-            Stage stage = new Stage();
-            Parent root = FXMLLoader.load(getClass().getResource("VistaDatosCompra.fxml"));
-            Scene scene = new Scene(root);
-            stage.setScene(scene);
-            stage.setTitle("Compra");
-            Stage viejaVentana = (Stage) this.bttnComp.getScene().getWindow();
-            viejaVentana.close();
-            stage.showAndWait();
-
-        } catch (IOException e){
+        // Comprueba que haya seleccionado un coche
+        if (this.tblComprar.getSelectionModel().getSelectedItem() == null) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setHeaderText(null);
             alert.setTitle("Error");
-            alert.setContentText(e.getMessage());
+            alert.setContentText("Debes seleccionar un coche");
             alert.showAndWait();
+        } else {
+            // Coge los datos del coche seleccionado
+            CocheTabla ct = this.tblComprar.getSelectionModel().getSelectedItem();
+            try {
+                setCocheTabla(ct);
+                Stage stage = new Stage();
+                Parent root = FXMLLoader.load(getClass().getResource("VistaDatosCompra.fxml"));
+                Scene scene = new Scene(root);
+                stage.setScene(scene);
+                stage.setTitle("Compra");
+                Stage viejaVentana = (Stage) this.bttnComp.getScene().getWindow();
+                viejaVentana.close();
+                stage.showAndWait();
+
+            } catch (IOException e){
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setHeaderText(null);
+                alert.setTitle("Error");
+                alert.setContentText(e.getMessage());
+                alert.showAndWait();
+            }
         }
+
+
     }
 
     @FXML
     void masInfo(ActionEvent event){
-        CocheTabla ct = this.tblComprar.getSelectionModel().getSelectedItem();
-
-        try {
-            setCocheTabla(ct);
-            Stage stage = new Stage();
-            Parent root = FXMLLoader.load(getClass().getResource("VistaMasInfo.fxml"));
-            Scene scene = new Scene(root);
-            stage.setScene(scene);
-            stage.setTitle("Compra");
-            stage.show();
-        } catch (IOException e){
+        // Comprueba que haya seleccionado un coche
+        if (this.tblComprar.getSelectionModel().getSelectedItem() == null) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setHeaderText(null);
             alert.setTitle("Error");
-            alert.setContentText(e.getMessage());
+            alert.setContentText("Debes seleccionar un coche");
             alert.showAndWait();
+        } else {
+            CocheTabla ct = this.tblComprar.getSelectionModel().getSelectedItem();
+            try {
+                setCocheTabla(ct);
+                Stage stage = new Stage();
+                Parent root = FXMLLoader.load(getClass().getResource("VistaMasInfo.fxml"));
+                Scene scene = new Scene(root);
+                stage.setScene(scene);
+                stage.setTitle("Más info");
+                stage.show();
+            } catch (IOException e){
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setHeaderText(null);
+                alert.setTitle("Error");
+                alert.setContentText(e.getMessage());
+                alert.showAndWait();
+            }
         }
+
+
+
+
 
 
     }
