@@ -131,42 +131,25 @@ public class ControllerDatosVender implements Initializable {
             try {
                 stmt = dbConnection.createStatement();
 
-                // Selecciona el modelo o lo crea si no existe
-                String seleccionarModelo = "SELECT id FROM concesionario.modelo WHERE nombre_marca = '" + m.getMarca() + "' AND nombre_modelo = '" + m.getModelo() + "'";
-                ResultSet resultadoIdModelo = stmt.executeQuery(seleccionarModelo);
-                int idModelo = 0;
-                if (!resultadoIdModelo.next()) {
-                    String insertarModelo = "INSERT IGNORE INTO concesionario.modelo(nombre_marca, nombre_modelo) VALUES('" + m.getMarca() + "', '" + m.getModelo() + "')";
-                    stmt.executeUpdate(insertarModelo);
-                } else {
-                    while (resultadoIdModelo.next()) {
-                        idModelo = resultadoIdModelo.getInt("id");
-                        System.out.println(idModelo);
-                    }
-                }
+                stmt.executeUpdate("SET FOREIGN_KEY_CHECKS=0");
+
+                int idModelo = getIdModelo(m, stmt);
 
 
-                // Selecciona el vendedor o lo crea si no existe
-                String seleccionarVendedor = "SELECT id FROM concesionario.vendedor WHERE dni = '" + p.getDni() + "'";
-                ResultSet resultadoIdVendedor = stmt.executeQuery(seleccionarVendedor);
-                int idVendedor = 0;
-                while (resultadoIdVendedor.next()) {
-                    idVendedor = resultadoIdVendedor.getInt("id");
-                    if (idVendedor > 0) {
-                        System.out.println(idVendedor);
-                    } else {
-                        String insertarVendedor = "INSERT INTO concesionario.vendedor(dni, nombre, apellido1, apellido2) VALUES('" + p.getDni() + "', '" + p.getNombre() + "', '" + p.getApellido1() + "', '" + p.getApellido2() + "')";
-                        stmt.executeUpdate(insertarVendedor);
-                    }
-                }
+                int idVendedor = getIdVendedor(p, stmt);
+
+                autoIncrement(stmt);
 
 
+                // Inserta el coche
                 String insertarCoche = "INSERT INTO concesionario.coche(matricula, kilometraje, potencia, color, precio, estado, id_vendedor, id_modelo) VALUES('" + c.getMatricula() + "', " + c.getKilometraje() + ", " + c.getPotencia() + ", '" + c.getColor() + "', " + c.getPrecio() + ", " + "'d', " + idVendedor + ", " + idModelo + ")";
                 stmt.executeUpdate(insertarCoche);
                 System.out.println("Coche insertado");
+
             } catch (SQLException e) {
                 e.printStackTrace();
             } finally {
+                stmt.executeUpdate("SET FOREIGN_KEY_CHECKS=1");
                 stmt.close();
             }
 
@@ -198,6 +181,51 @@ public class ControllerDatosVender implements Initializable {
             }
 
         }
+    }
+
+    private void autoIncrement(Statement stmt) throws SQLException {
+        // Valor correcto para el auto_increment
+        String seleccionarAutoincrement = "SELECT max(id) AS id FROM concesionario.coche";
+        ResultSet resultadoIdAutoincrement = stmt.executeQuery(seleccionarAutoincrement);
+        int idAutoincrement = 0;
+        while (resultadoIdAutoincrement.next()) {
+            idAutoincrement = resultadoIdAutoincrement.getInt("id");
+        }
+        stmt.executeUpdate("ALTER TABLE concesionario.coche auto_increment = " + idAutoincrement+1);
+    }
+
+    private int getIdVendedor(Persona p, Statement stmt) throws SQLException {
+        // Selecciona el vendedor o lo crea si no existe
+        String seleccionarVendedor = "SELECT id FROM concesionario.vendedor WHERE dni = '" + p.getDni() + "'";
+        ResultSet resultadoIdVendedor = stmt.executeQuery(seleccionarVendedor);
+        int idVendedor = 0;
+        while (resultadoIdVendedor.next()) {
+            idVendedor = resultadoIdVendedor.getInt("id");
+            if (idVendedor > 0) {
+                System.out.println(idVendedor);
+            } else {
+                String insertarVendedor = "INSERT INTO concesionario.vendedor(dni, nombre, apellido1, apellido2) VALUES('" + p.getDni() + "', '" + p.getNombre() + "', '" + p.getApellido1() + "', '" + p.getApellido2() + "')";
+                stmt.executeUpdate(insertarVendedor);
+            }
+        }
+        return idVendedor;
+    }
+
+    private int getIdModelo(Modelo m, Statement stmt) throws SQLException {
+        // Selecciona el modelo o lo crea si no existe
+        String seleccionarModelo = "SELECT id FROM concesionario.modelo WHERE nombre_marca = '" + m.getMarca() + "' AND nombre_modelo = '" + m.getModelo() + "'";
+        ResultSet resultadoIdModelo = stmt.executeQuery(seleccionarModelo);
+        int idModelo = 0;
+        if (!resultadoIdModelo.next()) {
+            String insertarModelo = "INSERT IGNORE INTO concesionario.modelo(nombre_marca, nombre_modelo) VALUES('" + m.getMarca() + "', '" + m.getModelo() + "')";
+            stmt.executeUpdate(insertarModelo);
+        } else {
+            while (resultadoIdModelo.next()) {
+                idModelo = resultadoIdModelo.getInt("id");
+                System.out.println(idModelo);
+            }
+        }
+        return idModelo;
     }
 
 }
