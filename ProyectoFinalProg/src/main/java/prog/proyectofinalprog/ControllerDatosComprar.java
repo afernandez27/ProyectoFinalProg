@@ -96,9 +96,6 @@ public class ControllerDatosComprar implements Initializable {
             String apellido1 = this.txtApellido1.getText();
             String apellido2 = this.txtApellido2.getText();
 
-            // Comprobar DNI
-            comprobarDNI(dni);
-
             // Creamos la persona y el coche
             Persona p = new Persona(dni, nombre, apellido1, apellido2, true);
 
@@ -161,12 +158,32 @@ public class ControllerDatosComprar implements Initializable {
         if (!resultadoIdCliente.next()) {
             String insertarPersona = "INSERT INTO concesionario.cliente(dni, nombre, apellido1, apellido2) VALUES('" + p.getDni() + "', '" + p.getNombre() + "', '" + p.getApellido1() + "', '" + p.getApellido2() + "')";
             stmt.executeUpdate(insertarPersona);
+            int id=idNuevoCliente(stmt,seleccionarCliente);
+            String insertarPedido = "INSERT INTO concesionario.pedido(numero_pedido,fecha_pedido,id_cliente) values('" + numeroPedido(stmt) + "', now(), " + id +")";
         } else {
             while (resultadoIdCliente.next()) {
                 idCliente = resultadoIdCliente.getInt("id");
                 System.out.println(idCliente);
             }
         }
+    }
+
+    private int numeroPedido(Statement stmt) throws SQLException {
+        ResultSet rs = stmt.executeQuery("SELECT count(id) as numero_pedidos from concesionario.pedido");
+        int numeroPedidos = 0;
+        while (rs.next()){
+            numeroPedidos = rs.getInt("numero_pedidos");
+        }
+        return numeroPedidos+1;
+    }
+
+    private int idNuevoCliente(Statement statement,String select) throws SQLException {
+        ResultSet rs = statement.executeQuery(select);
+        int id = 0;
+        while (rs.next()){
+            id = rs.getInt("id");
+        }
+        return id;
     }
 
 

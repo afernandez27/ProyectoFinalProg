@@ -134,8 +134,6 @@ public class ControllerDatosVender implements Initializable {
                 stmt.executeUpdate("SET FOREIGN_KEY_CHECKS=0");
 
                 int idModelo = getIdModelo(m, stmt);
-
-
                 int idVendedor = getIdVendedor(p, stmt);
 
                 autoIncrement(stmt);
@@ -213,16 +211,25 @@ public class ControllerDatosVender implements Initializable {
 
     private int getIdModelo(Modelo m, Statement stmt) throws SQLException {
         // Selecciona el modelo o lo crea si no existe
+        String cogerUltimoId = "SELECT max(id) as id from concesionario.modelo";
+        ResultSet rs = stmt.executeQuery(cogerUltimoId);
+        int ultimoId = 0;
+        while (rs.next()){
+            ultimoId = rs.getInt("id");
+        }
         String seleccionarModelo = "SELECT id FROM concesionario.modelo WHERE nombre_marca = '" + m.getMarca() + "' AND nombre_modelo = '" + m.getModelo() + "'";
-        ResultSet resultadoIdModelo = stmt.executeQuery(seleccionarModelo);
+
+        boolean flag = true;
         int idModelo = 0;
-        if (!resultadoIdModelo.next()) {
-            String insertarModelo = "INSERT IGNORE INTO concesionario.modelo(nombre_marca, nombre_modelo) VALUES('" + m.getMarca() + "', '" + m.getModelo() + "')";
-            stmt.executeUpdate(insertarModelo);
-        } else {
-            while (resultadoIdModelo.next()) {
-                idModelo = resultadoIdModelo.getInt("id");
-                System.out.println(idModelo);
+        while (flag) {
+            ResultSet resultadoIdModelo = stmt.executeQuery(seleccionarModelo);
+            if (!resultadoIdModelo.next()) {
+                String insertarModelo = "INSERT INTO concesionario.modelo(id,nombre_marca, nombre_modelo) VALUES(" + ultimoId + 1 + ", '" + m.getMarca() + "', '" + m.getModelo() + "')";
+                stmt.executeUpdate(insertarModelo);
+            } else {
+                    idModelo = resultadoIdModelo.getInt("id");
+                    System.out.println(idModelo);
+                    flag = false;
             }
         }
         return idModelo;
