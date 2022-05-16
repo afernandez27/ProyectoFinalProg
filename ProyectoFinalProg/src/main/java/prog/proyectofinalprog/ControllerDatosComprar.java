@@ -69,9 +69,22 @@ public class ControllerDatosComprar implements Initializable {
 
     @FXML
     void cancelarCompraCoche(ActionEvent event) {
-        Node source = (Node) event.getSource();
-        Stage stage = (Stage) source.getScene().getWindow();
-        stage.close();
+        try{
+            Stage viejaVentana = (Stage) this.bttnConfirmarCompra.getScene().getWindow();
+            viejaVentana.close();
+            Stage stage = new Stage();
+            Parent root = FXMLLoader.load(getClass().getResource("VistaCompra.fxml"));
+            Scene scene = new Scene(root);
+            stage.setScene(scene);
+            stage.setTitle("Compra");
+            stage.show();
+        }catch (IOException e){
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setHeaderText(null);
+            alert.setTitle("Error");
+            alert.setContentText(e.getMessage());
+            alert.showAndWait();
+        }
     }
 
     @FXML
