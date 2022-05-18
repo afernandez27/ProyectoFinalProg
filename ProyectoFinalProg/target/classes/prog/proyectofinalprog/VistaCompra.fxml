@@ -9,11 +9,14 @@
    <children>
       <TableView fx:id="tblComprar" layoutX="172.0" layoutY="18.0" prefHeight="400.0" prefWidth="499.0">
         <columns>
-            <TableColumn fx:id="tblcMatricula" editable="false" prefWidth="122.0" sortable="false" text="Matricula" />
+            <TableColumn fx:id="tblcMatricula" editable="false" prefWidth="122.0" text="Matricula" />
           <TableColumn fx:id="tblcMarca" editable="false" prefWidth="122.0" sortable="false" text="Marca" />
           <TableColumn fx:id="tblcModelo" editable="false" prefWidth="174.0" sortable="false" text="Modelo" />
             <TableColumn fx:id="tblcPrecio" editable="false" sortable="false" text="Precio" />
         </columns>
+         <columnResizePolicy>
+            <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+         </columnResizePolicy>
       </TableView>
       <Button fx:id="bttnComp" layoutX="31.0" layoutY="163.0" mnemonicParsing="false" onAction="#compra" prefHeight="25.0" prefWidth="134.0" text="Comprar" />
       <Button fx:id="bttnInfo" layoutX="31.0" layoutY="207.0" mnemonicParsing="false" onAction="#masInfo" prefHeight="25.0" prefWidth="134.0" text="Mas Info" />
