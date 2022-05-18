@@ -224,7 +224,7 @@ public class ControllerDatosVender implements Initializable {
         while (flag) {
             ResultSet resultadoIdModelo = stmt.executeQuery(seleccionarModelo);
             if (!resultadoIdModelo.next()) {
-                String insertarModelo = "INSERT INTO concesionario.modelo(id,nombre_marca, nombre_modelo) VALUES(" + ultimoId + 1 + ", '" + m.getMarca() + "', '" + m.getModelo() + "')";
+                String insertarModelo = "INSERT INTO concesionario.modelo(id,nombre_marca, nombre_modelo) VALUES(" + (ultimoId+1) + ", '" + m.getMarca() + "', '" + m.getModelo() + "')";
                 stmt.executeUpdate(insertarModelo);
             } else {
                     idModelo = resultadoIdModelo.getInt("id");

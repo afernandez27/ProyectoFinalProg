@@ -1,0 +1,12 @@
+-----------------------------------------------------------
+DNI= a
+Nombre cliente= a
+Primer Apellido= a
+Segundo Apellido= a
+NºPedido= 1
+Fecha del pedido= 2022-05-16
+Matricula= b
+Nombre de la marca= a
+Nombre del modelo= a
+Precio= 1
+-----------------------------------------------------------

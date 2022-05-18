@@ -99,9 +99,11 @@ public class ControllerDatosComprar implements Initializable {
             // Creamos la persona y el coche
             Persona p = new Persona(dni, nombre, apellido1, apellido2, true);
 
-            if (comprobarDNI(p.getDni())) {
-                Statement stmt = null;
-                dbConnection = DriverManager.getConnection("jdbc:mysql://localhost:3306/", "root", "root");
+            dbConnection = DriverManager.getConnection("jdbc:mysql://localhost:3306/", "root", "root");
+            Statement stmt = null;
+
+            if (!existeDNI(p.getDni()) && comprobarDNI(p.getDni())) {
+
 
                 // Actualiza el registro de la bbdd a vendido e inserta el cliente
                 try {
@@ -127,7 +129,11 @@ public class ControllerDatosComprar implements Initializable {
             alert.setContentText("Error con el formato de los números");
             alert.showAndWait();
         } catch (SQLException e) {
-            e.printStackTrace();
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setHeaderText(null);
+            alert.setTitle("Error");
+            alert.setContentText(e.getSQLState());
+            alert.showAndWait();;
         } finally {
             try{
                 Stage viejaVentana = (Stage) this.bttnConfirmarCompra.getScene().getWindow();
@@ -150,6 +156,12 @@ public class ControllerDatosComprar implements Initializable {
 
     }
 
+    private boolean existeDNI(String dni) throws SQLException {
+        Statement stmt = dbConnection.createStatement();
+        ResultSet rs = stmt.executeQuery("SELECT id from concesionario.cliente where dni= '" + dni + "'");
+        return rs.next();
+    }
+
     private void insertarCliente(Persona p, Statement stmt) throws SQLException {
         String seleccionarCliente = "SELECT id FROM concesionario.cliente where dni = '" + p.getDni() + "'";
         ResultSet resultadoIdCliente = stmt.executeQuery(seleccionarCliente);
@@ -160,12 +172,42 @@ public class ControllerDatosComprar implements Initializable {
             stmt.executeUpdate(insertarPersona);
             int id=idNuevoCliente(stmt,seleccionarCliente);
             String insertarPedido = "INSERT INTO concesionario.pedido(numero_pedido,fecha_pedido,id_cliente) values('" + numeroPedido(stmt) + "', now(), " + id +")";
+            stmt.executeUpdate(insertarPedido);
+            int idPedido = ultimoIdPedido(stmt);
+            int idCoche = seleccionarIdCoche(stmt);
+            String insertarLineaPedido = "INSERT INTO concesionario.linea_pedido(id_coche,id_pedido) values(" + idCoche + ", " + idPedido +" )";
+            stmt.executeUpdate(insertarLineaPedido);
         } else {
             while (resultadoIdCliente.next()) {
                 idCliente = resultadoIdCliente.getInt("id");
                 System.out.println(idCliente);
+                int id=idNuevoCliente(stmt,seleccionarCliente);
+                String insertarPedido = "INSERT INTO concesionario.pedido(numero_pedido,fecha_pedido,id_cliente) values('" + numeroPedido(stmt) + "', now(), " + id +")";
+                stmt.executeUpdate(insertarPedido);
+                int idPedido = ultimoIdPedido(stmt);
+                int idCoche = seleccionarIdCoche(stmt);
+                String insertarLineaPedido = "INSERT INTO concesionario.linea_pedido(id_coche,id_pedido) values(" + idCoche + ", " + idPedido +" )";
+                stmt.executeUpdate(insertarLineaPedido);
             }
         }
+    }
+
+    private int seleccionarIdCoche(Statement stmt) throws SQLException {
+        ResultSet rs = stmt.executeQuery("SELECT id from concesionario.coche where matricula= '" + ct.getMatricula() +"'");
+        int idCoche = 0;
+        while (rs.next()){
+            idCoche = rs.getInt("id");
+        }
+        return idCoche;
+    }
+
+    private int ultimoIdPedido(Statement st) throws SQLException {
+        ResultSet rs = st.executeQuery("SELECT max(id) as id from concesionario.pedido");
+        int ID = 0;
+        while (rs.next()){
+            ID = rs.getInt("id");
+        }
+        return ID;
     }
 
     private int numeroPedido(Statement stmt) throws SQLException {
