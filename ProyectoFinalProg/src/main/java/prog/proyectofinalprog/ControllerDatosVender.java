@@ -124,31 +124,50 @@ public class ControllerDatosVender implements Initializable {
             Modelo m = new Modelo(marca, modelo);
             Coche c = new Coche(matricula, kilometraje, potencia, color, precio, m);
 
-            Statement stmt = null;
-//             Conexión con la base de datos para insertar el coche
-//            Connection dbConnection;
-            dbConnection = DriverManager.getConnection("jdbc:mysql://localhost:3306/", "root", "root");
-            try {
-                stmt = dbConnection.createStatement();
 
-                stmt.executeUpdate("SET FOREIGN_KEY_CHECKS=0");
+            if (comprobarDNI(p.getDni())) {
+                if (comprobarMatricula(c.getMatricula())) {
+                    Statement stmt = null;
+//                  Conexión con la base de datos para insertar el coche
+//                  Connection dbConnection;
+                    dbConnection = DriverManager.getConnection("jdbc:mysql://localhost:3306/", "root", "root");
+                    try {
+                        stmt = dbConnection.createStatement();
 
-                int idModelo = getIdModelo(m, stmt);
-                int idVendedor = getIdVendedor(p, stmt);
+                        stmt.executeUpdate("SET FOREIGN_KEY_CHECKS=0");
 
-                autoIncrement(stmt);
+                        int idModelo = getIdModelo(m, stmt);
+                        int idVendedor = getIdVendedor(p, stmt);
+
+                        autoIncrement(stmt);
 
 
-                // Inserta el coche
-                String insertarCoche = "INSERT INTO concesionario.coche(matricula, kilometraje, potencia, color, precio, estado, id_vendedor, id_modelo) VALUES('" + c.getMatricula() + "', " + c.getKilometraje() + ", " + c.getPotencia() + ", '" + c.getColor() + "', " + c.getPrecio() + ", " + "'d', " + idVendedor + ", " + idModelo + ")";
-                stmt.executeUpdate(insertarCoche);
-                System.out.println("Coche insertado");
+                        // Inserta el coche
+                        String insertarCoche = "INSERT INTO concesionario.coche(matricula, kilometraje, potencia, color, precio, estado, id_vendedor, id_modelo) VALUES('" + c.getMatricula() + "', " + c.getKilometraje() + ", " + c.getPotencia() + ", '" + c.getColor() + "', " + c.getPrecio() + ", " + "'d', " + idVendedor + ", " + idModelo + ")";
+                        stmt.executeUpdate(insertarCoche);
+                        System.out.println("Coche insertado");
 
-            } catch (SQLException e) {
-                e.printStackTrace();
-            } finally {
-                stmt.executeUpdate("SET FOREIGN_KEY_CHECKS=1");
-                stmt.close();
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                    } finally {
+                        stmt.executeUpdate("SET FOREIGN_KEY_CHECKS=1");
+                        stmt.close();
+                    }
+                } else {
+                    Alert alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setHeaderText(null);
+                    alert.setTitle("Error");
+                    alert.setContentText("Error al introducir la matrícula");
+                    alert.showAndWait();
+                    this.txtMatricula.clear();
+                }
+            } else {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setHeaderText(null);
+                alert.setTitle("Error");
+                alert.setContentText("Error al introducir el DNI");
+                alert.showAndWait();
+                this.txtDNI.clear();
             }
 
         } catch (NumberFormatException e) {
@@ -189,7 +208,7 @@ public class ControllerDatosVender implements Initializable {
         while (resultadoIdAutoincrement.next()) {
             idAutoincrement = resultadoIdAutoincrement.getInt("id");
         }
-        stmt.executeUpdate("ALTER TABLE concesionario.coche auto_increment = " + idAutoincrement+1);
+        stmt.executeUpdate("ALTER TABLE concesionario.coche auto_increment = " + ++idAutoincrement);
     }
 
     private int getIdVendedor(Persona p, Statement stmt) throws SQLException {
@@ -227,12 +246,19 @@ public class ControllerDatosVender implements Initializable {
                 String insertarModelo = "INSERT INTO concesionario.modelo(id,nombre_marca, nombre_modelo) VALUES(" + (ultimoId+1) + ", '" + m.getMarca() + "', '" + m.getModelo() + "')";
                 stmt.executeUpdate(insertarModelo);
             } else {
-                    idModelo = resultadoIdModelo.getInt("id");
-                    System.out.println(idModelo);
-                    flag = false;
+                idModelo = resultadoIdModelo.getInt("id");
+                System.out.println(idModelo);
+                flag = false;
             }
         }
         return idModelo;
     }
 
+    private boolean comprobarDNI(String dni) {
+        return dni.matches("[0-9]{8}[A-Za-z]");
+    }
+
+    private boolean comprobarMatricula(String matricula) {
+        return matricula.matches("[0-9]{4}[A-Z]{3}");
+    }
 }
