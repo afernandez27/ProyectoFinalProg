@@ -8,6 +8,7 @@ import javafx.scene.control.Alert;
 
 import java.util.Objects;
 
+// Constructores de la clase Coche
 public class Coche {
     private String matricula;
     private int kilometraje;
@@ -27,7 +28,7 @@ public class Coche {
         this.precio = precio;
         this.modelo = modelo;
     }
-
+    //Getters y setters
     public Modelo getModelo() {
         return modelo;
     }
@@ -75,7 +76,7 @@ public class Coche {
     public void setPrecio(int precio) {
         this.precio = precio;
     }
-
+    //Hashcode y equals para diferenciar los objetos
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -89,13 +90,15 @@ public class Coche {
         return Objects.hash(matricula, kilometraje, potencia, color, precio, modelo);
     }
 
+    //Metodo para llenar la tabla del controller comprar
     public ObservableList<CocheTabla> getCoches(){
         ObservableList<CocheTabla> arrCoches = FXCollections.observableArrayList();
         Connection conexion;
+        //Hacemos la conexion, creamos el objeto y añadimos el objeto a la tabla
         try {
             conexion = DriverManager.getConnection("jdbc:mysql://localhost:3306/concesionario","root","root");
             Statement statement = conexion.createStatement();
-            ResultSet rs = statement.executeQuery("select * from coche where estado='d'");
+            ResultSet rs = statement.executeQuery("select precio, matricula, id_modelo from coche where estado='d'");
 
             while (rs.next()){
                 int precio = rs.getInt("precio");
@@ -116,13 +119,14 @@ public class Coche {
         }
         return arrCoches;
     }
+    //recuperamos la marca y el modelo a partir del id
     public static Modelo getModelo(int id){
         Connection conexion;
         Modelo m=null;
         try {
             conexion = DriverManager.getConnection("jdbc:mysql://localhost:3306/concesionario","root","root");
             Statement statement = conexion.createStatement();
-            ResultSet rs = statement.executeQuery("select * from modelo where id=" + id);
+            ResultSet rs = statement.executeQuery("select nombre_marca, nombre_modelo from modelo where id=" + id);
 
             while (rs.next()){
                 String marca = rs.getString("nombre_marca");

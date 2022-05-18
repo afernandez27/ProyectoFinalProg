@@ -28,6 +28,7 @@ public class ControllerBienvenida {
     @FXML
     private Button bttnPedidos;
 
+    //Metodo que se lanza cuando se preiona comprar, genera la ventana comprar
     @FXML
     void comprarCoche(ActionEvent event) {
         try {
@@ -51,6 +52,7 @@ public class ControllerBienvenida {
         }
     }
 
+    //Metodo que se lanza cuando se preiona vender, genera la ventana vender
     @FXML
     void venderCoche(ActionEvent event) {
         try {
@@ -72,6 +74,8 @@ public class ControllerBienvenida {
             alert.showAndWait();
         }
     }
+
+    //Metodo que genera una carpeta Pedidos con dos archivos uno con extension csv y otro con extension txt
     @FXML
     void generarPedidos(ActionEvent event){
         File txt = null;

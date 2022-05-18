@@ -4,14 +4,11 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.fxml.LoadException;
-import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.event.ActionEvent;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -58,6 +55,7 @@ public class ControllerComprar implements Initializable {
         return this.tblComprar;
     }
 
+    //Metodo que se lanza cuando se presiona el boton comprar que genera una ventana con los datos de la tabla
     @FXML
     void compra(ActionEvent event) {
         // Comprueba que haya seleccionado un coche
@@ -89,10 +87,9 @@ public class ControllerComprar implements Initializable {
                 alert.showAndWait();
             }
         }
-
-
     }
 
+    //Metodo que se lanza cuando se presiona el boton mas info que genera una nueva ventana que muestra mas informacion del coches seleccionado
     @FXML
     void masInfo(ActionEvent event){
         // Comprueba que haya seleccionado un coche
@@ -120,13 +117,9 @@ public class ControllerComprar implements Initializable {
                 alert.showAndWait();
             }
         }
-
-
-
-
-
-
     }
+
+    //Metodo para cerrar la ventana y volver a la anterior
     @FXML
     void cerrar(ActionEvent event) {
         try {
@@ -148,10 +141,7 @@ public class ControllerComprar implements Initializable {
         }
     }
 
-    public void refrescar(){
-        this.tblComprar.refresh();
-    }
-
+    //Metodo para inicializar la ventana para generar la tabla
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         this.tblcMatricula.setCellValueFactory(new PropertyValueFactory("matricula"));

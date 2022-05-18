@@ -53,20 +53,16 @@ public class ControllerDatosComprar implements Initializable {
 
     CocheTabla ct;
 
-    public void setCocheTabla(CocheTabla ct){
-        this.ct=ct;
-    }
-
-
+    //Metodo que inicializa la ventana
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         ct = ControllerComprar.getCocheTabla();
         this.txtMarca.setText(ct.getMarca());
         this.txtModelo.setText(ct.getModelo());
         this.txtPrecio.setText(String.valueOf(ct.getPrecio()));
-
     }
 
+    //Metodo que se lanza cuando se pulsa el boton cancelar, que cierra la ventana actual y vuelve a la anterior
     @FXML
     void cancelarCompraCoche(ActionEvent event) {
         try{
@@ -87,6 +83,7 @@ public class ControllerDatosComprar implements Initializable {
         }
     }
 
+    //Metodo que se lanza cuando se presiona el boton, que guarda los datos en la base
     @FXML
     void confirmarCompra(ActionEvent event) {
         try {
