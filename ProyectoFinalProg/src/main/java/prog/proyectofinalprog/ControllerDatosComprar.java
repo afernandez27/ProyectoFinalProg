@@ -116,6 +116,7 @@ public class ControllerDatosComprar implements Initializable {
                 alert.setHeaderText(null);
                 alert.setTitle("Error");
                 alert.setContentText("Error al introducir el DNI");
+                alert.showAndWait();
                 this.txtDNI.clear();
             }
 
